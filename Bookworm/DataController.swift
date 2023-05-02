@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 public class DataController: ObservableObject {
-    private let container = NSPersistentContainer(name: "Bookworm")
+    internal let container = NSPersistentContainer(name: "Bookworm")
     private var saveTask: Task<Void, Error>?
     
     public init() {
