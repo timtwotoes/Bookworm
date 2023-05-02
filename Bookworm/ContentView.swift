@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var dataController: DataController
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationSplitView {
+            ListingView()
+                .frame(minWidth: 250)
+        } detail: {
+            if let selectedReview = dataController.selectedReview {
+                ReviewDetailView(review: selectedReview)
+            } else {
+                Text("Please select review")
+            }
         }
-        .padding()
     }
 }
 

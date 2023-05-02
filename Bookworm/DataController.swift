@@ -9,8 +9,11 @@ import Foundation
 import CoreData
 
 public class DataController: ObservableObject {
-    internal let container = NSPersistentContainer(name: "Bookworm")
+    
+    let container = NSPersistentContainer(name: "Bookworm")
     private var saveTask: Task<Void, Error>?
+    
+    @Published var selectedReview: Review?
     
     public init() {
         container.loadPersistentStores { description, error in
