@@ -23,6 +23,14 @@ struct ListingView: View {
             Button(action: addReview) {
                 Label("Add Review", systemImage: "plus")
             }
+            Button(action: deleteSelectedReview) {
+                Label("Delete", systemImage: "trash")
+            }
+            .disabled(dataController.selectedReview == nil)
+        }
+        .onDeleteCommand(perform: deleteSelectedReview)
+        .contextMenu {
+            Button("Delete", role: .destructive, action: deleteSelectedReview)
         }
     }
     
@@ -36,7 +44,30 @@ struct ListingView: View {
         id += 1
         dataController.save()
         dataController.selectedReview = review
-    }    
+    }
+    
+    func deleteSelectedReview() {
+        guard let selectedReview = dataController.selectedReview else {
+            return
+        }
+        
+        guard let selectedIndex = reviews.firstIndex(of: selectedReview) else {
+            return
+        }
+        
+        managedObjectContext.delete(selectedReview)
+        try? managedObjectContext.save()
+        
+        if selectedIndex < reviews.count {
+            dataController.selectedReview = reviews[selectedIndex]
+        } else {
+            let previousIndex = selectedIndex - 1
+            
+            if previousIndex >= 0 {
+                dataController.selectedReview = reviews[previousIndex]
+            }
+        }
+    }
 }
 
 struct ListingView_Previews: PreviewProvider {
