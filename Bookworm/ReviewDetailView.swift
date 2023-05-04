@@ -10,6 +10,7 @@ import SwiftUI
 struct ReviewDetailView: View {
     @ObservedObject var review: Review
     @EnvironmentObject var dataController: DataController
+    @State private var showingRendered = false
     
     var body: some View {
         Form {
@@ -31,6 +32,16 @@ struct ReviewDetailView: View {
         .onChange(of: review.reviewText, perform: dataController.enqueueSave)
         .onChange(of: review.rating, perform: dataController.enqueueSave)
         .disabled(review.managedObjectContext == nil)
+        .toolbar {
+            Button {
+                showingRendered = true
+            } label: {
+                Label("Show rendered", systemImage: "book")
+            }
+        }
+        .sheet(isPresented: $showingRendered) {
+            RenderView(review: review)
+        }
     }
 }
 
